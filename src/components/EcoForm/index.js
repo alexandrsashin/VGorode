@@ -10,8 +10,13 @@ const organizations = features.map((feature, index) => ({
   text: feature.properties.Attributes.Name
 }));
 
+const cutOptionsList = items => items.slice(0, 10);
+
 class EcoForm extends PureComponent {
-  state = { selectedOrganization: {} };
+  state = {
+    selectedOrganization: {},
+    organizationOptions: cutOptionsList(organizations)
+  };
 
   onSelect = text => {
     const { onOrganizationSelect } = this.props;
@@ -21,8 +26,16 @@ class EcoForm extends PureComponent {
     this.setState({ selectedOrganization }, () => onOrganizationSelect(selectedOrganization));
   };
 
+  onSearchChange = (e, { searchQuery }) => {
+    const filteredOrganizations = organizations.filter(organization =>
+      organization.text.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    const organizationOptions = cutOptionsList(filteredOrganizations);
+    this.setState({ organizationOptions });
+  };
+
   render() {
-    const { selectedOrganization } = this.state;
+    const { selectedOrganization, organizationOptions } = this.state;
     return (
       <div>
         <Dropdown
@@ -30,21 +43,20 @@ class EcoForm extends PureComponent {
           fluid
           search
           selection
-          options={organizations.slice(0, 10)}
+          options={organizationOptions}
           placeholder="Выберите организацию"
+          onSearchChange={this.onSearchChange}
           onChange={e => this.onSelect(e.currentTarget.innerText)}
         />
         <div>
           {!_isEmpty(selectedOrganization) && (
             <div className="eco-form__organization">
               <div className="eco-form__organization-field">
-                Организация: {selectedOrganization.properties.Attributes.Name}
+                <strong>Организация:</strong> {selectedOrganization.properties.Attributes.Name}
               </div>
-              {!_isEmpty(selectedOrganization.geometry.coordinates) && (
-                <div className="eco-form__organization-field">
-                  Координаты: {String(selectedOrganization.geometry.coordinates)}
-                </div>
-              )}
+              <div className="eco-form__organization-field">
+                <strong>Адрес:</strong> {selectedOrganization.properties.Attributes.LegalAddress}
+              </div>
             </div>
           )}
         </div>
