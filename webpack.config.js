@@ -34,6 +34,10 @@ module.exports = {
       {
         test: /\.(png|svg|jpeg|jpg|gif|ttf|woff|woff2|eot)$/,
         use: ['file-loader']
+      },
+      {
+        test: /\.(json|geojson)$/,
+        loader: 'json-loader'
       }
     ]
   },

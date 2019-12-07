@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import _isEqual from 'lodash/isEqual';
+import _isEmpty from 'lodash/isEmpty';
 import './Map.css';
 
 class Map extends PureComponent {
@@ -97,7 +98,9 @@ class Map extends PureComponent {
   };
 
   drawEcoOrganizations = () => {
+    const { organization } = this.props;
     this.drawingMap.setZoom(11);
+    if (_isEmpty(organization)) return;
     const searchText = '103073, Moscow';
     const geocoder = this.platform.getGeocodingService();
     geocoder.geocode({ searchText }, result => {
@@ -120,11 +123,12 @@ class Map extends PureComponent {
   };
 
   componentDidUpdate(prevProps) {
-    const { location, issue } = this.props;
+    const { location, issue, organization } = this.props;
     if (!_isEqual(prevProps.location, location)) {
       this.renderMapObjects(location.pathname);
     }
     if (!_isEqual(prevProps.issue, issue)) this.drawIssues(issue);
+    if (!_isEqual(prevProps.organization, organization)) this.drawEcoOrganizations(issue);
   }
 
   render() {

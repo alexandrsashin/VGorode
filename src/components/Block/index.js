@@ -31,7 +31,7 @@ const apps = [
 
 class Block extends PureComponent {
   render() {
-    const { onIssueSubmit } = this.props;
+    const { onOrganizationSelect, onIssueSubmit } = this.props;
     return (
       <div className="block">
         <div className="block__apps">
@@ -49,7 +49,10 @@ class Block extends PureComponent {
         <div className="block__content">
           <Switch>
             <Route path="/route" component={RouteMap} />
-            <Route path="/eco" component={EcoForm} />
+            <Route
+              path="/eco"
+              render={() => <EcoForm onOrganizationSelect={onOrganizationSelect} />}
+            />
             <Route path="/issue-report" render={() => <IssueReport onSubmit={onIssueSubmit} />} />
           </Switch>
         </div>

@@ -3,16 +3,26 @@ import MainPage from './MainPage';
 
 class Main extends PureComponent {
   state = {
-    issue: {}
+    issue: {},
+    organization: {}
   };
+
+  onOrganizationSelect = organization => this.setState({ organization });
 
   onIssueSubmit = issueData => {
     this.setState({ issue: issueData });
   };
 
   render() {
-    const { issue } = this.state;
-    return <MainPage issue={issue} onIssueSubmit={this.onIssueSubmit} />;
+    const { issue, organization } = this.state;
+    return (
+      <MainPage
+        issue={issue}
+        organization={organization}
+        onOrganizationSelect={this.onOrganizationSelect}
+        onIssueSubmit={this.onIssueSubmit}
+      />
+    );
   }
 }
 

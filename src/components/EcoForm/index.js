@@ -1,34 +1,28 @@
 import React, { PureComponent } from 'react';
 import { Dropdown } from 'semantic-ui-react';
+import _isEmpty from 'lodash/isEmpty';
+import { features } from './ecoOrganizationList.geojson';
+import './EcoForm.css';
 
-const countryOptions = [
-  { key: 'af', value: 'af', text: 'Afghanistan' },
-  { key: 'ax', value: 'ax', text: 'Aland Islands' },
-  { key: 'al', value: 'al', text: 'Albania' },
-  { key: 'dz', value: 'dz', text: 'Algeria' },
-  { key: 'as', value: 'as', text: 'American Samoa' },
-  { key: 'ad', value: 'ad', text: 'Andorra' },
-  { key: 'ao', value: 'ao', text: 'Angola' },
-  { key: 'ai', value: 'ai', text: 'Anguilla' },
-  { key: 'ag', value: 'ag', text: 'Antigua' },
-  { key: 'ar', value: 'ar', text: 'Argentina' },
-  { key: 'am', value: 'am', text: 'Armenia' },
-  { key: 'aw', value: 'aw', text: 'Aruba' },
-  { key: 'au', value: 'au', text: 'Australia' },
-  { key: 'at', value: 'at', text: 'Austria' },
-  { key: 'az', value: 'az', text: 'Azerbaijan' },
-  { key: 'bs', value: 'bs', text: 'Bahamas' },
-  { key: 'bh', value: 'bh', text: 'Bahrain' },
-  { key: 'bd', value: 'bd', text: 'Bangladesh' },
-  { key: 'bb', value: 'bb', text: 'Barbados' },
-  { key: 'by', value: 'by', text: 'Belarus' },
-  { key: 'be', value: 'be', text: 'Belgium' },
-  { key: 'bz', value: 'bz', text: 'Belize' },
-  { key: 'bj', value: 'bj', text: 'Benin' }
-];
+const organizations = features.map((feature, index) => ({
+  key: index,
+  value: index,
+  text: feature.properties.Attributes.Name
+}));
 
 class EcoForm extends PureComponent {
+  state = { selectedOrganization: {} };
+
+  onSelect = text => {
+    const { onOrganizationSelect } = this.props;
+    const selectedOrganization = features.find(
+      feature => feature.properties.Attributes.Name === text
+    );
+    this.setState({ selectedOrganization }, () => onOrganizationSelect(selectedOrganization));
+  };
+
   render() {
+    const { selectedOrganization } = this.state;
     return (
       <div>
         <Dropdown
@@ -36,9 +30,22 @@ class EcoForm extends PureComponent {
           fluid
           search
           selection
-          options={countryOptions}
-          placeholder="Select Country"
+          options={organizations.slice(0, 10)}
+          placeholder="Выберите организацию"
+          onChange={e => this.onSelect(e.currentTarget.innerText)}
         />
+        <div>
+          {!_isEmpty(selectedOrganization) && (
+            <div className="eco-form__organization">
+              <div className="eco-form__organization-field">
+                Организация: {selectedOrganization.properties.Attributes.Name}
+              </div>
+              <div className="eco-form__organization-field">
+                Координаты: {String(selectedOrganization.geometry.coordinates)}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
