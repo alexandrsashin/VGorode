@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Link, Route, Switch, Redirect } from 'react-router-dom';
-import SearchForm from '../SearchForm';
+import { NavLink, Route, Switch } from 'react-router-dom';
+import RouteMap from '../RouteMap';
+import EcoForm from '../EcoForm';
+import IssueReport from '../IssueReport';
 import './Block.css';
 
 const apps = [
@@ -31,14 +33,22 @@ class Block extends PureComponent {
   render() {
     return (
       <div className="block">
-        {apps.map(({ appId, appName, appLink }) => (
-          <Link key={appId} to={appLink}>
-            {appName}
-          </Link>
-        ))}
+        <div className="block__apps">
+          {apps.map(({ appId, appName, appLink }) => (
+            <NavLink
+              key={appId}
+              to={appLink}
+              className="block__app"
+              activeClassName="block__app--active"
+            >
+              {appName}
+            </NavLink>
+          ))}
+        </div>
         <Switch>
-          <Route exact path="/" component={SearchForm} />
-          <Redirect to="/" />
+          <Route path="/route" component={RouteMap} />
+          <Route path="/eco" component={EcoForm} />
+          <Route path="/issue-report" component={IssueReport} />
         </Switch>
       </div>
     );

@@ -27,7 +27,7 @@ const countryOptions = [
   { key: 'bj', value: 'bj', text: 'Benin' }
 ];
 
-class SearchForm extends PureComponent {
+class EcoForm extends PureComponent {
   render() {
     return (
       <div>
@@ -44,4 +44,4 @@ class SearchForm extends PureComponent {
   }
 }
 
-export default SearchForm;
+export default EcoForm;

@@ -2,3 +2,26 @@
     padding: 0 12px;
     box-sizing: border-box;
 }
+
+.block__apps {
+    display: flex;
+    flex-direction: column;
+}
+
+.block__app {
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    text-decoration: none;
+    border: 1px solid #afafaf;
+    border-radius: 3px;
+}
+
+.block__app:hover {
+    border-color: #5aa8fb;
+}
+
+.block__app--active {
+    background: rgba(237, 237, 255, 0.2);
+    border-color: #5aa8fb;
+}
