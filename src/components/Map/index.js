@@ -1,17 +1,22 @@
 import React, { PureComponent } from 'react';
+import _isEqual from 'lodash/isEqual';
 import './Map.css';
 
 class Map extends PureComponent {
   map = React.createRef();
 
   componentDidMount() {
-    const platform = new H.service.Platform({
+    const {
+      location: { pathname }
+    } = this.props;
+
+    this.platform = new H.service.Platform({
       apikey: 'HvVbNGT4fOCDM0GmtobBtgYiekLboSwmXUrdb-xtpFo'
     });
 
-    const defaultLayers = platform.createDefaultLayers();
+    const defaultLayers = this.platform.createDefaultLayers();
 
-    const map = new H.Map(this.map.current, defaultLayers.vector.normal.map, {
+    this.drawingMap = new H.Map(this.map.current, defaultLayers.vector.normal.map, {
       center: {
         lat: 55.75203,
         lng: 37.61951
@@ -20,46 +25,25 @@ class Map extends PureComponent {
       pixelRatio: window.devicePixelRatio || 1
     });
 
-    window.addEventListener('resize', () => map.getViewPort().resize());
+    window.addEventListener('resize', () => this.drawingMap.getViewPort().resize());
 
-    map.addEventListener('tap', function(evt) {
+    this.drawingMap.addEventListener('tap', function(evt) {
       // Log 'tap' and 'mouse' events:
       console.log(evt.type, evt.currentPointer.type);
     });
 
     H.map.IInteraction;
 
-    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(this.drawingMap));
 
-    const ui = H.ui.UI.createDefault(map, defaultLayers);
+    const ui = H.ui.UI.createDefault(this.drawingMap, defaultLayers);
 
-    //Begin routing
-    //Configure transportation mode, start, end points
-    const request = {
-      mode: 'fastest;car',
-      waypoint0: 'geo!37.80221,-122.4191',
-      waypoint1: 'geo!37.76839,-122.51089',
-      representation: 'display'
-    };
-    //Initialize routing service
-    const router = platform.getRoutingService();
-    router.calculateRoute(request, response => {
-      //Parse the route's shape
-      const shape = response.response.route[0].shape.map(x => x.split(','));
-      const linestring = new H.geo.LineString();
-      shape.forEach(s => linestring.pushLatLngAlt(s[0], s[1]));
-      //Create a polyline with the shape
-      const routeLine = new H.map.Polyline(linestring, {
-        style: { strokeColor: 'blue', lineWidth: 3 }
-      });
-      //Add route to map
-      map.addObject(routeLine);
-      //Zoom to bounds of the route shape
-      map.getViewModel().setLookAtData({ bounds: routeLine.getBoundingBox() });
-    });
+    this.renderMapObjects(pathname);
+
+    //Begin geocoding
 
     // // Инициализация соединения с облачным хранилищем HERE XYZ
-    // const service = platform.getXYZService({
+    // const service = this.platform.getXYZService({
     //   token: "AMd-wn9MQLusUyHUMArtmQA"
     // })
 
@@ -70,7 +54,63 @@ class Map extends PureComponent {
     // const spaceLayer = new H.map.layer.TileLayer(spaceProvider)
 
     // // Добавление данных на карту
-    // map.addLayer(customSpaceLayer)
+    // this.drawingMap.addLayer(customSpaceLayer)
+  }
+
+  renderMapObjects = pathname => {
+    this.drawingMap.removeObjects(this.drawingMap.getObjects());
+    switch (pathname) {
+      case '/route':
+        return this.drawRouting();
+      case '/eco':
+        return this.drawEcoOrganizations();
+      case '/issue-report':
+        return;
+    }
+  };
+
+  drawRouting = () => {
+    //Begin routing
+    //Configure transportation mode, start, end points
+    const request = {
+      mode: 'fastest;car',
+      waypoint0: 'geo!55.75577 37.62835',
+      waypoint1: 'geo!56.75577 37.62835',
+      representation: 'display'
+    };
+    //Initialize routing service
+    const router = this.platform.getRoutingService();
+    router.calculateRoute(request, response => {
+      //Parse the route's shape
+      const shape = response.response.route[0].shape.map(x => x.split(','));
+      const linestring = new H.geo.LineString();
+      shape.forEach(s => linestring.pushLatLngAlt(s[0], s[1]));
+      //Create a polyline with the shape
+      const routeLine = new H.map.Polyline(linestring, {
+        style: { strokeColor: 'blue', lineWidth: 3 }
+      });
+      //Add route to map
+      this.drawingMap.addObject(routeLine);
+      //Zoom to bounds of the route shape
+      this.drawingMap.getViewModel().setLookAtData({ bounds: routeLine.getBoundingBox() });
+    });
+  };
+
+  drawEcoOrganizations = () => {
+    const searchText = '103073, Moscow';
+    const geocoder = this.platform.getGeocodingService();
+    geocoder.geocode({ searchText }, result => {
+      const location = result.Response.View[0].Result[0].Location.DisplayPosition;
+      const { Latitude: lat, Longitude: lng } = location;
+      console.log(lat, lng);
+      const marker = new H.map.Marker({ lat, lng });
+      this.drawingMap.addObject(marker);
+    });
+  };
+
+  componentDidUpdate(prevProps) {
+    const { location } = this.props;
+    if (!_isEqual(prevProps.location, location)) this.renderMapObjects(location.pathname);
   }
 
   render() {
