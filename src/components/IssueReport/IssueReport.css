@@ -1,5 +1,6 @@
 .issue-report {
     margin-top: 12px;
+    margin-bottom: 20px;
 }
 
 .issue-report__field {
@@ -9,4 +10,19 @@
 
 .issue-report .ui.form .field {
     margin-top: 8px;
+}
+
+.issue-report__issue {
+    margin-top: 12px;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    text-decoration: none;
+    border: 1px solid #afafaf;
+    border-radius: 3px;
+}
+
+.issue-report__issue-field {
+    margin-bottom: 8px;
 }

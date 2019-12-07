@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Form, Input, TextArea } from 'semantic-ui-react';
+import _isEmpty from 'lodash/isEmpty';
 import './IssueReport.css';
 
 const initialFormData = {
@@ -10,7 +11,8 @@ const initialFormData = {
 
 class IssueReport extends PureComponent {
   state = {
-    formData: initialFormData
+    formData: initialFormData,
+    issue: {}
   };
 
   onChange = ({ name, value }) => {
@@ -22,11 +24,11 @@ class IssueReport extends PureComponent {
     const { onSubmit } = this.props;
     const { formData } = this.state;
     onSubmit(formData);
-    this.setState({ formData: initialFormData });
+    this.setState({ issue: formData, formData: initialFormData });
   };
 
   render() {
-    const { formData } = this.state;
+    const { formData, issue } = this.state;
     return (
       <div className="issue-report">
         <Form onSubmit={this.onSubmit}>
@@ -50,6 +52,13 @@ class IssueReport extends PureComponent {
           />
           <Form.Button>Submit</Form.Button>
         </Form>
+        {!_isEmpty(issue) && (
+          <div className="issue-report__issue">
+            <div className="issue-report__issue-field">Тема: {issue.label}</div>
+            <div className="issue-report__issue-field">Адрес: {issue.address}</div>
+            <div className="issue-report__issue-field">Описание: {issue.description}</div>
+          </div>
+        )}
       </div>
     );
   }

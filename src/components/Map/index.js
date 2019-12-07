@@ -98,6 +98,7 @@ class Map extends PureComponent {
   };
 
   drawEcoOrganizations = () => {
+    this.drawingMap.removeObjects(this.drawingMap.getObjects());
     const { organization } = this.props;
     this.drawingMap.setZoom(11);
     if (_isEmpty(organization)) return;
