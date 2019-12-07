@@ -1,0 +1,7 @@
+.main__container {
+    display: flex;
+}
+
+.main__text-block {
+    width: 50%;
+}

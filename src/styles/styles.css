@@ -1,0 +1,54 @@
+:root {
+  --mobile-navigation-height: 44px;
+}
+
+* {
+  font-size: 18px;
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+}
+
+/* changed because of semantic-ui */
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child {
+  margin-top: 20px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 600;
+  text-align: center;
+}
+
+h3 {
+  font-size: 1.17em;
+  font-weight: 600;
+}
+
+a {
+  color: #1b2834;
+  border-bottom: 1px solid;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #5aa8fb;
+  border-bottom: 1px solid #5aa8fb;
+}
+
+li {
+  margin-bottom: 8px;
+}
+
+@media screen and (min-width: 576px) {
+  h1 {
+    text-align: left;
+  }
+}

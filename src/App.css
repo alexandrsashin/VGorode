@@ -1,0 +1,10 @@
+.app__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+}
+
+.app__header .app__header-title {
+  margin: 0;
+}
