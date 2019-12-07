@@ -97,6 +97,7 @@ class Map extends PureComponent {
   };
 
   drawEcoOrganizations = () => {
+    this.drawingMap.setZoom(11);
     const searchText = '103073, Moscow';
     const geocoder = this.platform.getGeocodingService();
     geocoder.geocode({ searchText }, result => {
