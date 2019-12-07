@@ -102,7 +102,6 @@ class Map extends PureComponent {
     geocoder.geocode({ searchText }, result => {
       const location = result.Response.View[0].Result[0].Location.DisplayPosition;
       const { Latitude: lat, Longitude: lng } = location;
-      console.log(lat, lng);
       const marker = new H.map.Marker({ lat, lng });
       this.drawingMap.addObject(marker);
     });

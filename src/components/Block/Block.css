@@ -25,3 +25,7 @@
     background: rgba(237, 237, 255, 0.2);
     border-color: #5aa8fb;
 }
+
+.block__content {
+    margin-top: 20px;
+}
