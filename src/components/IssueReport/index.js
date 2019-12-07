@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Form } from 'semantic-ui-react';
+import { Form, Input, TextArea } from 'semantic-ui-react';
 import './IssueReport.css';
 
 const initialFormData = {
@@ -26,20 +26,27 @@ class IssueReport extends PureComponent {
   };
 
   render() {
+    const { formData } = this.state;
     return (
       <div className="issue-report">
         <Form onSubmit={this.onSubmit}>
-          <Form.Input
+          <Input
+            className="issue-report__field"
+            value={formData.label}
             placeholder="Название темы"
             onChange={(e, { value }) => this.onChange({ name: 'label', value })}
           />
-          <Form.TextArea
-            placeholder="Описание"
-            onChange={(e, { value }) => this.onChange({ name: 'description', value })}
-          />
-          <Form.Input
+          <Input
+            className="issue-report__field"
+            value={formData.address}
             placeholder="Введите адрес"
             onChange={(e, { value }) => this.onChange({ name: 'address', value })}
+          />
+          <TextArea
+            className="issue-report__field"
+            value={formData.description}
+            placeholder="Описание"
+            onChange={(e, { value }) => this.onChange({ name: 'description', value })}
           />
           <Form.Button>Submit</Form.Button>
         </Form>

@@ -1,3 +1,12 @@
 .issue-report {
     margin-top: 12px;
 }
+
+.issue-report__field {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.issue-report .ui.form .field {
+    margin-top: 8px;
+}

@@ -11,7 +11,8 @@ class Main extends PureComponent {
   };
 
   render() {
-    return <MainPage onIssueSubmit={this.onIssueSubmit} />;
+    const { issue } = this.state;
+    return <MainPage issue={issue} onIssueSubmit={this.onIssueSubmit} />;
   }
 }
 

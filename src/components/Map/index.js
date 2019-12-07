@@ -74,8 +74,8 @@ class Map extends PureComponent {
     //Configure transportation mode, start, end points
     const request = {
       mode: 'fastest;car',
-      waypoint0: 'geo!55.75577 37.62835',
-      waypoint1: 'geo!56.75577 37.62835',
+      waypoint0: 'geo!55.768576,37.649116',
+      waypoint1: 'geo!55.774516,37.622296',
       representation: 'display'
     };
     //Initialize routing service
@@ -107,9 +107,23 @@ class Map extends PureComponent {
     });
   };
 
+  drawIssues = issue => {
+    const { address: searchText } = issue;
+    const geocoder = this.platform.getGeocodingService();
+    geocoder.geocode({ searchText }, result => {
+      const location = result.Response.View[0].Result[0].Location.DisplayPosition;
+      const { Latitude: lat, Longitude: lng } = location;
+      const marker = new H.map.Marker({ lat, lng });
+      this.drawingMap.addObject(marker);
+    });
+  };
+
   componentDidUpdate(prevProps) {
-    const { location } = this.props;
-    if (!_isEqual(prevProps.location, location)) this.renderMapObjects(location.pathname);
+    const { location, issue } = this.props;
+    if (!_isEqual(prevProps.location, location)) {
+      this.renderMapObjects(location.pathname);
+    }
+    if (!_isEqual(prevProps.issue, issue)) this.drawIssues(issue);
   }
 
   render() {
