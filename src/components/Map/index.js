@@ -101,9 +101,8 @@ class Map extends PureComponent {
     const { organization } = this.props;
     this.drawingMap.setZoom(11);
     if (_isEmpty(organization)) return;
-    const searchText = '103073, Moscow';
     const geocoder = this.platform.getGeocodingService();
-    geocoder.geocode({ searchText }, result => {
+    geocoder.geocode({ searchText: organization.properties.Attributes.LegalAddress }, result => {
       const location = result.Response.View[0].Result[0].Location.DisplayPosition;
       const { Latitude: lat, Longitude: lng } = location;
       const marker = new H.map.Marker({ lat, lng });

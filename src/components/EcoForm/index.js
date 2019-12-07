@@ -40,9 +40,11 @@ class EcoForm extends PureComponent {
               <div className="eco-form__organization-field">
                 Организация: {selectedOrganization.properties.Attributes.Name}
               </div>
-              <div className="eco-form__organization-field">
-                Координаты: {String(selectedOrganization.geometry.coordinates)}
-              </div>
+              {!_isEmpty(selectedOrganization.geometry.coordinates) && (
+                <div className="eco-form__organization-field">
+                  Координаты: {String(selectedOrganization.geometry.coordinates)}
+                </div>
+              )}
             </div>
           )}
         </div>
